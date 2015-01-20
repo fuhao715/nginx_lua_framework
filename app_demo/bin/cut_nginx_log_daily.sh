@@ -2,15 +2,15 @@
 # This script run at 00:00
 
 # Add this line to crontab
-#00 00 * * * /bin/bash /path/to/fuhao_ngx_lua-demo/bin/cut_nginx_log_daily.sh
+#00 00 * * * /bin/bash /path/to/siva_ngx_lua-demo/bin/cut_nginx_log_daily.sh
 
 # Set App Home
 source `dirname $0`/utils.sh
-fuhao_ngx_lua_app_home=$APP_ROOT
+siva_ngx_lua_app_home=$APP_ROOT
 
 #/////////////////////////////////////////////////////////////////////////////////////
 
-logs_path="$fuhao_ngx_lua_app_home/nginx_runtime/logs"
+logs_path="$siva_ngx_lua_app_home/nginx_runtime/logs"
 log_files=`ls $logs_path`
 
 year=$(date -d "yesterday" +"%Y")

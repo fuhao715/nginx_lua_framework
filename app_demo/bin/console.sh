@@ -1,4 +1,4 @@
 #!/bin/bash
 
-$FUHAO_NGX_LUA_HOME/bin/fuhaoconsole http://localhost:9800/fuhaoconsole
+$SIVA_NGX_LUA_HOME/bin/sivaconsole http://localhost:9800/sivaconsole
 

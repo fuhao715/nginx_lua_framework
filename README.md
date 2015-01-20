@@ -424,13 +424,13 @@ lua 的 table 充当了数组和映射表的双重功能，通过组合模式可
 
 所谓Table其实就是一个Key Value的数据结构，它很像Javascript中的Object，或是Python中的Dict，在别的语言里Map，Table长成这个样子：
 
-fuhao = {site="http://fuhao715.github.io/", age=10, passion=True}
+siva = {site="http://fuhao715.github.io/", age=10, passion=True}
 下面是table的CRUD操作：
 
-fuhao.ceo="许QQ"  -- 增
-fuhao.site=nil     -- 删
-fuhao.passion = false  -- 改
-local age = fuhao.age --查
+siva.ceo="许QQ"  -- 增
+siva.site=nil     -- 删
+siva.passion = false  -- 改
+local age = siva.age --查
 
 上面看上去像Go/C中的结构体 Or Java中的Bean，但是site,age, passion, ceo都是key。
 
@@ -1036,13 +1036,13 @@ os.tmpname ()	临时文件名
 * OpenResty 安装    
 > 参看：http://openresty.org/#Installation 编译时选择luajit, ./configure --with-luajit   
 
-* Fuhao_Nginx_lua 安装      
-> Checkout Fuhao_Nginx_lua 代码     
+* Siva_Nginx_lua 安装      
+> Checkout Siva_Nginx_lua 代码     
 
 * 配置环境变量     
 > 
   export OPENRESTY_HOME=/usr/local/openresty     
-  export FUHAO_NGX_LUA_HOME=/path/to/fuhao_ngx_lua 
+  export SIVA_NGX_LUA_HOME=/path/to/siva_ngx_lua 
   将以上两个环境变量 加到 ~/.bash_profile 里，下次登陆自动生效      
   vim ~/.bash_profile     
   使环境变量立即生效   
@@ -1053,8 +1053,8 @@ os.tmpname ()	临时文件名
 
     
 <pre><code class="markdown"> 
-cd  /path/to/fuhao_ngx_lua/bin
-./fuhao_ngx_lua  new <APP_NAME> <APP_PATH>
+cd  /path/to/siva_ngx_lua/bin
+./siva_ngx_lua  new <APP_NAME> <APP_PATH>
  
 </code>
 </pre>
@@ -1063,7 +1063,7 @@ cd  /path/to/fuhao_ngx_lua/bin
  
 ## 程序目录结构  
 <pre><code class="markdown" > 
-moochine-demo #程序根目录
+siva-demo #程序根目录
 |-- routing.lua # URL Routing配置
 |-- application.lua # app 描述文件
 |-- app #应用目录
@@ -1076,7 +1076,7 @@ moochine-demo #程序根目录
 |   |-- console.sh #控制台。注意:控制台需要安装Python2.7或Python3.2。
 |   `-- cut_nginx_log_daily.sh #Nginx日志切割脚本
 |-- conf  #配置目录
-|    `-- nginx.conf  #Nginx配置文件模版。需要配置 `set $MOOCHINE_APP_NAME 'moochine-demo';` 为真实App的名字。
+|    `-- nginx.conf  #Nginx配置文件模版。需要配置 `set $SIVA_APP_NAME 'siva-demo';` 为真实App的名字。
 |-- appname.log.yyyy-mm-dd.log #调试日志文件。在 application.lua 可以配置路径和Level。
 `-- nginx_runtime #Nginx运行时目录。这个目录下的文件由程序自动生成，无需手动管理。
     |-- conf
@@ -1117,7 +1117,7 @@ debug={
 }
 
 logger = {
-    file = "fuhao_ngx_lua_demo.log",
+    file = "siva_ngx_lua_demo.log",
     level = "DEBUG",
 }
 
@@ -1134,7 +1134,7 @@ mysql= {
     db= "taps",
     charset = "UTF8",
     username = "root",
-    passwd= "fuhao@2014",
+    passwd= "siva@2014",
     timeout= 10000,
     max_packet_size= 1024*1024,
     poolsize= 2000
@@ -1154,7 +1154,7 @@ mysql= {
 #!/usr/bin/env lua
 -- -*- lua -*-
 
-local router = require('fuhao.router')
+local router = require('siva.router')
 router.setup()
 
 ---------------------------------------------------------------------

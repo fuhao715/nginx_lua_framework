@@ -2,7 +2,7 @@
 # utils functions and variables
 # author: KDr2
 
-if [[ $FUHAO_NGX_LUA_HOME = "" ]] || [[ $OPENRESTY_HOME = "" ]]; then
+if [[ $SIVA_NGX_LUA_HOME = "" ]] || [[ $OPENRESTY_HOME = "" ]]; then
     source ~/.bashrc
 fi
 

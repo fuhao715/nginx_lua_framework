@@ -1,7 +1,7 @@
 --
 -- application configuration
 --
--- var in this file can be got by "fuhao.util.get_config(key)"
+-- var in this file can be got by "siva.util.get_config(key)"
 --
 
 debug={
@@ -10,7 +10,7 @@ debug={
 }
 
 logger = {
-    file = "fuhao_ngx_lua_demo.log",
+    file = "siva_ngx_lua_demo.log",
     level = "DEBUG",
 }
 redis = {
@@ -26,7 +26,7 @@ mysql= {
     db= "taps",
     charset = "UTF8",
     username = "root",
-    passwd= "fuhao@2014",
+    passwd= "siva@2014",
     timeout= 10000,
     max_packet_size= 1024*1024,
     poolsize= 2000
@@ -37,7 +37,7 @@ config={
 }
 
 subapps={
-    -- subapp_name = {path="/path/to/another/fuhao_ngx_luaapp", config={}},
+    -- subapp_name = {path="/path/to/another/siva_ngx_luaapp", config={}},
 }
 
 

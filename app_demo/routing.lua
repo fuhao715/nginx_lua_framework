@@ -4,11 +4,11 @@
 -- author : ldmiao
 --
 
-local router = require('fuhao.router')
+local router = require('siva.router')
 router.setup()
 
 ---------------------------------------------------------------------
-map('^/fuhaoconsole',                 'fuhao.console.start')
+map('^/sivaconsole',                 'siva.console.start')
 
 map('^/hello%?name=(.*)',           'test.hello')
 map('^/longtext',                   'test.longtext')

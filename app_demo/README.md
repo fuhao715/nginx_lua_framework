@@ -1,17 +1,17 @@
-# OpenResty(ngx_lua)+Moochine 完整实例
+# OpenResty(ngx_lua)+SIVA 完整实例
 
-这个项目演示了如何使用OpenResty和Moochine开发Web应用。
+这个项目演示了如何使用OpenResty和SIVA开发Web应用。
 
 ## 〇、Run this demo with/in Docker
 
 Get Docker image and run:
 
-    docker pull kdr2/debian:sid-moochine
+    docker pull kdr2/debian:sid-siva
     # run in attached docker container shell:
-    $ docker run -t -i -p 0.0.0.0:9801:9800 kdr2/debian:sid-moochine /bin/bash
-    root@4df89d75e286:/# /root/moochine-demo/bin/start.sh
+    $ docker run -t -i -p 0.0.0.0:9801:9800 kdr2/debian:sid-siva /bin/bash
+    root@4df89d75e286:/# /root/siva-demo/bin/start.sh
     # or in a detached dcoker container:
-    $ docker run -d -p 0.0.0.0:9801:9800 kdr2/debian:sid-moochine /root/moochine-demo/bin/start.sh -f
+    $ docker run -d -p 0.0.0.0:9801:9800 kdr2/debian:sid-siva /root/siva-demo/bin/start.sh -f
 
 Then visit http://localhost:9801/ltp with you browser.
 More details: https://registry.hub.docker.com/u/kdr2/debian/
@@ -22,16 +22,16 @@ More details: https://registry.hub.docker.com/u/kdr2/debian/
 参看：http://openresty.org/#Installation
 编译时选择luajit, `./configure --with-luajit`
 
-### 1.2 Moochine 安装
-    #Checkout Moochine 代码
-    git clone git://github.com/appwilldev/moochine.git
+### 1.2 SIVA 安装
+    #Checkout SIVA 代码
+    git clone git://github.com/appwilldev/siva.git
 
 ### 1.3 配置环境变量
     #设置OpenResty环境变量
     export OPENRESTY_HOME=/usr/local/openresty
 
-    #设置Moochine环境变量
-    export MOOCHINE_HOME=/path/to/moochine
+    #设置SIVA环境变量
+    export SIVA_HOME=/path/to/siva
 
     #将以上两个环境变量 加到 ~/.bash_profile 里，下次登陆自动生效
     vim ~/.bash_profile
@@ -41,15 +41,15 @@ More details: https://registry.hub.docker.com/u/kdr2/debian/
 
 ## 二、示例(模版)程序
 ### 2.1 Checkout 示例代码
-    git clone git://github.com/appwilldev/moochine-demo.git
-    cd moochine-demo
+    git clone git://github.com/appwilldev/siva-demo.git
+    cd siva-demo
 
 ### 2.2 程序目录结构
 
-    moochine-demo #程序根目录
+    siva-demo #程序根目录
     |
     |-- routing.lua # URL Routing配置
-    |-- application.lua # moochine app 描述文件
+    |-- application.lua # siva app 描述文件
     |
     |-- app #应用目录
     |   `-- test.lua #请求处理函数
@@ -59,11 +59,11 @@ More details: https://registry.hub.docker.com/u/kdr2/debian/
     |   |-- reload.sh #平滑重载配置
     |   |-- start.sh #启动
     |   |-- stop.sh #关闭
-    |   |-- console.sh #moochine控制台。注意:moochine控制台需要安装Python2.7或Python3.2。
+    |   |-- console.sh #siva控制台。注意:siva控制台需要安装Python2.7或Python3.2。
     |   `-- cut_nginx_log_daily.sh #Nginx日志切割脚本
     |
     |-- conf  #配置目录
-    |    `-- nginx.conf  #Nginx配置文件模版。需要配置 `set $MOOCHINE_APP_NAME 'moochine-demo';` 为真实App的名字。
+    |    `-- nginx.conf  #Nginx配置文件模版。需要配置 `set $SIVA_APP_NAME 'siva-demo';` 为真实App的名字。
     |
     |-- templates  #ltp模版目录
     |    `-- ltp.html  #ltp模版文件
@@ -71,7 +71,7 @@ More details: https://registry.hub.docker.com/u/kdr2/debian/
     |-- static  #静态文件(图片,css,js等)目录
     |    `-- main.js  #js文件
     |
-    |-- moochine_demo.log #调试日志文件。在 application.lua 可以配置路径和Level。
+    |-- siva_demo.log #调试日志文件。在 application.lua 可以配置路径和Level。
     |
     `-- nginx_runtime #Nginx运行时目录。这个目录下的文件由程序自动生成，无需手动管理。
         |-- conf
@@ -94,12 +94,12 @@ More details: https://registry.hub.docker.com/u/kdr2/debian/
 ### 2.4 测试
     curl "http://localhost:9800/hello?name=xxxxxxxx"
     curl "http://localhost:9800/ltp"
-    tail -f moochine_demo.log #查看 调试日志的输出
+    tail -f siva_demo.log #查看 调试日志的输出
     tail -f nginx_runtime/logs/access.log  #查看 Nginx 访问日志的输出
     tail -f nginx_runtime/logs/error.log  #查看 Nginx 错误日志和调试日志 的输出
 
-### 2.5 通过moochine控制台调试
-    ./bin/console.sh #运行后会打开一个console，可以输入调试代码检查结果。注意:moochine控制台需要安装Python2.7或Python3.2。
+### 2.5 通过siva控制台调试
+    ./bin/console.sh #运行后会打开一个console，可以输入调试代码检查结果。注意:siva控制台需要安装Python2.7或Python3.2。
 
 ## 三、开发Web应用
 ### 3.1 URL Routing: routing.lua
@@ -213,24 +213,24 @@ More details: https://registry.hub.docker.com/u/kdr2/debian/
 
 查看调试日志
 
-    tail -f moochine_demo.log
+    tail -f siva_demo.log
 
 查看nginx错误日志
 
     tail -f nginx_runtime/logs/error.log  #查看 Nginx 错误日志和调试日志 的输出
 
 ### 3.6 常见错误
-1. MOOCHINE URL Mapping Error
+1. SIVA URL Mapping Error
 1. Error while doing defers
-1. Moochine ERROR
+1. SIVA ERROR
 
 ## 四、Multi-App 与 Sub-App
 
 ### 4.1 multi-app
-    多个 moochine-app 可以运行与同一nginx进程中，只要将本例子中nginx.conf内moochine-app相关段配置多份即可。
+    多个 siva-app 可以运行与同一nginx进程中，只要将本例子中nginx.conf内siva-app相关段配置多份即可。
 
 ### 4.2 sub-app
-    某moochine-app可以作为另一app的sub-app运行，在主app的application.lua内配置：
+    某siva-app可以作为另一app的sub-app运行，在主app的application.lua内配置：
 
     subapps={
         subapp1 = {path="/path/to/subapp1", config={}},
@@ -242,4 +242,4 @@ More details: https://registry.hub.docker.com/u/kdr2/debian/
 1. http://wiki.nginx.org/HttpLuaModule
 1. http://wiki.nginx.org/HttpCoreModule
 1. http://openresty.org
-1. https://github.com/appwilldev/moochine
+1. https://github.com/appwilldev/siva

@@ -123,7 +123,7 @@ function getIP(req,resp)
 end
 
 function ltp(req, resp)
-    resp:ltp("ltp.html", {v="hello, fuhao_ngx_lua!"})
+    resp:ltp("ltp.html", {v="hello, siva_ngx_lua!"})
 end
 
 function upload(req,resp)
@@ -214,7 +214,7 @@ function upgrade(req,resp)
                      local default_rt = require("default_json")
                      result = default_rt:data_not_found()
                   else 
-                      local utils = require("fuhao.util")
+                      local utils = require("siva.util")
                       local pkgHash = utils.redis_hash_to_table(pkgHash_t) 
                       logger:i("----pkgHash----"..JSON.encode(pkgHash ))
 
@@ -309,7 +309,7 @@ function getRelatedApps(pkgId, pkgName)
       if 0 ~= table.getn(pkgHash_t) then
         logger:i("----pkgHash_t getn not  nil----")
 
-        local utils = require("fuhao.util")
+        local utils = require("siva.util")
         local pkgHash = utils.redis_hash_to_table(pkgHash_t)
         logger:i("----pkgHash----"..JSON.encode(pkgHash ))
         local versions,err = red:zrange("pkg:"..pkgId..":effVers",-1,-1,"WITHSCORES")
@@ -354,7 +354,7 @@ end
 
 function parse_version(version)
    if  version then
-      local utils = require("fuhao.util")
+      local utils = require("siva.util")
       local v_ta =  utils.lua_string_split(version,"%p")
       local noF = 0 
       local noS = 0 

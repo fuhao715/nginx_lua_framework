@@ -2,7 +2,7 @@
 
 # set global variables
 #export OPENRESTY_HOME=/usr/local/openresty
-#export FUHAO_NGX_LUA_HOME=/your/path/to/fuhao_ngx_lua
+#export SIVA_NGX_LUA_HOME=/your/path/to/siva_ngx_lua
 
 source `dirname $0`/utils.sh
 
@@ -20,8 +20,8 @@ mkdir -p $NGINX_FILES/logs
 
 cp $APP_ROOT/conf/mime.types $NGINX_FILES/conf/
 
-sed -e "s|__FUHAO_NGX_LUA_HOME_VALUE__|$FUHAO_NGX_LUA_HOME|" \
-    -e "s|__FUHAO_NGX_LUA_APP_PATH_VALUE__|$APP_ROOT|" \
+sed -e "s|__SIVA_NGX_LUA_HOME_VALUE__|$SIVA_NGX_LUA_HOME|" \
+    -e "s|__SIVA_NGX_LUA_APP_PATH_VALUE__|$APP_ROOT|" \
     -e "s|__NGINX_USER__|$CURRENT_USER|" \
     -e "s|__NGINX_GRP__|$CURRENT_USER|" \
     -e "s|__NGINX_DAEMON_FLAG__|$NGINX_DAEMON_FLAG|" \
