@@ -1,4 +1,4 @@
-# 打造高性能Web平台Nginx定制开发实战  
+# 打造高性能Web平台Nginx定制开发实战-Siva  
 
 
 ## 由 Lua 粘合的 Nginx 生态环境   
@@ -1019,7 +1019,7 @@ os.tmpname ()	临时文件名
 
  
 
-## Nginx Lua框架
+## Siva 框架
 ### 简介
 
 > 基于OpenResty(ngx_lua)+Moochine   
