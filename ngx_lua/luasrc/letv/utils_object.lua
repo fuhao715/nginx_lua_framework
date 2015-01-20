@@ -44,3 +44,40 @@ function update(target, source, keys)
         end
     end
 end
+
+function map(func, t)
+	local new_t = {}
+	for i,v in ipairs(t) do
+		table_insert(new_t, func(v, i))
+	end
+	return new_t
+end
+
+
+function isNull(v)
+	return (v==nil or v==ngx.null)
+end
+
+function isNotNull(v)
+	return not isNull(v)
+end
+
+
+
+function deepcopy(object)
+	local lookup_table = {}
+	local function _copy(object)
+		if type(object) ~= "table" then
+			return object
+		elseif lookup_table[object] then
+			return lookup_table[object]
+		end
+		local new_table = {}
+		lookup_table[object] = new_table
+		for index, value in pairs(object) do
+			new_table[_copy(index)] = _copy(value)
+		end
+		return setmetatable(new_table, getmetatable(object))
+	end
+	return _copy(object)
+end
