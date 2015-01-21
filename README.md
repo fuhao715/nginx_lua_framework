@@ -1061,7 +1061,7 @@ cd  /path/to/siva_ngx_lua/bin
 
 
  
-## 程序目录结构  
+### 程序目录结构  
 <pre><code class="markdown" > 
 siva-demo #程序根目录
 |-- routing.lua # URL Routing配置
@@ -1107,7 +1107,7 @@ siva-demo #程序根目录
 
  
 
-## 配置redis，mysql等
+### 配置redis，mysql等
 
 <pre><code class="markdown">
 debug={
@@ -1138,12 +1138,7 @@ mysql= {
     max_packet_size= 1024*1024,
     poolsize= 2000
 }
-    </code></pre>
-
-   
-
-
- 
+    </code></pre>    
 
 
 ### URL Routing: routing.lua
