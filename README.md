@@ -1141,8 +1141,7 @@ mysql= {
     </code></pre>    
 
 
-### URL Routing: routing.lua
-
+### URL Routing：routing.lua    
     
 <pre><code class="markdown"> 
 #!/usr/bin/env lua
@@ -1161,8 +1160,7 @@ map('^/ip%?ip=(.*)',                        'test.getIP')
 
  
 
-### 请求处理函数：app/test.lua
----
+### 请求处理函数：app/test.lua  
     
 <pre><code class="markdown"> 
 module("test", package.seeall)
