@@ -1109,8 +1109,7 @@ siva-demo #程序根目录
 
 ## 配置redis，mysql等
 
-    <div class="columns-2">
-    <pre><code class="markdown">
+<pre><code class="markdown">
 debug={
     on=false,
     to="response", -- "ngx.log"
