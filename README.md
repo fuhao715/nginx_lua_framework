@@ -1150,8 +1150,6 @@ mysql= {
 local router = require('siva.router')
 router.setup()
 
----------------------------------------------------------------------
-
 map('^/ip%?ip=(.*)',                        'test.getIP')
 </code>
 </pre>
