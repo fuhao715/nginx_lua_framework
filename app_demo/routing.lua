@@ -17,6 +17,7 @@ map('^/ip',                        'test.getIP')
 map('^/upload',                        'test.upload')
 map('^/mysql',                        'test.get_mysql_opsystem')
 map('^/upgrade',                        'test.upgrade')
+map('^/httpclient',                        'test.inner')
 
 
 ---------------------------------------------------------------------
