@@ -1,5 +1,7 @@
 #!/usr/bin/env lua
 -- -*- lua -*-
+-- Copyright 2015 siva Inc.
+-- Author : fuhao 
 
 module('siva.redis_conn', package.seeall)
 

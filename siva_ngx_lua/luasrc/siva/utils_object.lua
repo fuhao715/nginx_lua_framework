@@ -1,7 +1,7 @@
 #!/usr/bin/env lua
 -- -*- lua -*-
--- Copyright 2014 Appwill Inc.
--- Author : siva 
+-- Copyright 2015 siva Inc.
+-- Author : fuhao 
 --
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");

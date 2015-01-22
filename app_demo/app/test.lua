@@ -1,7 +1,7 @@
 #!/usr/bin/env lua
 -- -*- lua -*-
--- copyright: 2012 Appwill Inc.
--- author : ldmiao
+-- copyright: 2015 siva Inc.
+-- author : fuhao
 --
 
 module("test", package.seeall)
@@ -374,7 +374,7 @@ end
 
 function inner(req,resp)
    logger:i("-----开始调用httpclient------")
-   local http = require "letv.http"
+   local http = require "siva.http"
             local hc = http:new()
 
             local ok, code, headers, status, body  = hc:request {

@@ -1,5 +1,8 @@
 module("siva.http", package.seeall)
 
+-- Copyright 2015 siva Inc.
+-- Author : fuhao 
+
 _VERSION = '0.2'
 
 -- constants

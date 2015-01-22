@@ -1,7 +1,7 @@
 #!/usr/bin/env lua
 -- -*- lua -*-
--- copyright: 2012 Appwill Inc.
--- author : ldmiao
+-- copyright: 2015 siva Inc.
+-- author : fuhao
 --
 
 local router = require('siva.router')
@@ -18,6 +18,7 @@ map('^/upload',                        'test.upload')
 map('^/mysql',                        'test.get_mysql_opsystem')
 map('^/upgrade',                        'test.upgrade')
 map('^/httpclient',                        'test.inner')
+map('^/ctr',                        'ctr.ctr')
 
 
 ---------------------------------------------------------------------
