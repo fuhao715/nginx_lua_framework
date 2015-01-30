@@ -1267,14 +1267,13 @@ _.each({1,2,3}, print)
 
 * Iterator Functions and Arrays     
 <pre><code class="markdown">     
-function sq(n)
-  return coroutine.wrap(function() 
-    for i=1,n do
-      coroutine.yield(i*i)
-    end
-  end)
-end   
-
+function sq(n)  
+  return coroutine.wrap(function()     
+    for i=1,n do     
+      coroutine.yield(i*i)    
+    end       
+  end)    
+end      
 _.each(sq(5), print)   
 => 1   
 => 4  
@@ -1282,8 +1281,8 @@ _.each(sq(5), print)
 => 16  
 => 25    
 
-</code>
-</pre>  
+</code>   
+</pre>    
 
 
 * 面向对象和函数式风格     
@@ -1300,7 +1299,6 @@ local lyrics = {
   { line = 3, words = "He's a lumberjack and he's okay" },   
   { line = 4, words = "He sleeps all night and he works all day" }   
 }    
-
 _(lyrics):chain()  
   :map(function(line) 
     local words = {}    
