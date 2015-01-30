@@ -1250,6 +1250,441 @@ response:defer(func, ...)                   -- 在response返回后执行
 </code>
 </pre>
 
+### luaer的magic写法支持
+* 简介      
+>  luaer是一个lua库,提供了一组实用函数处理迭代器,数组,表和函数以及map、reduce、chain等magic函数式编程的支持。   
+
+* 快速使用指南   
+<pre><code class="markdown">    
+_ = require 'luaer'    
+_.each({1,2,3}, print)  
+=> 1
+=> 2
+=> 3
+</code>
+</pre>  
+
+
+* Iterator Functions and Arrays   
+<pre><code class="markdown">    
+function sq(n)
+  return coroutine.wrap(function() 
+    for i=1,n do
+      coroutine.yield(i*i)
+    end
+  end)
+end
+
+_.each(sq(5), print)
+=> 1
+=> 4
+=> 9
+=> 16
+=> 25
+</code>
+</pre>  
+
+
+* 面向对象和函数式风格     
+<pre><code class="markdown">    
+_.map({1, 2, 3}, function(n) return n * 2 end)
+_({1, 2, 3}):map(function(n) return n * 2 end) 
+</code>
+</pre>  
+>  使用面向对象的风格方法允许书写链式结构的调用。调用chain把对象包装成wrapped object传递给后续的所有的方法调用，并且返回wrapped objects。当你完成了计算,使用values来获取最终的价值。如下例子  
+<pre><code class="markdown">    
+local lyrics = {
+  { line = 1, words = "I'm a lumberjack and I'm okay" },
+  { line = 2, words = "I sleep all night and I work all day" },
+  { line = 3, words = "He's a lumberjack and he's okay" },
+  { line = 4, words = "He sleeps all night and he works all day" }
+}
+
+_(lyrics):chain()
+  :map(function(line) 
+    local words = {}
+    for w in line.words:gmatch("%S+") do
+      words[#words+1] = w   
+    end
+    return words
+  end)
+  :flatten()
+  :reduce({}, function(counts, word)
+    counts[word] = (counts[word] or 0) + 1
+    return counts
+  end):value()
+</code>
+</pre>  
+> 还可以写得更加简洁，更有luaer范   
+<pre><code class="markdown">    
+_(lyrics):chain()
+  :map(function(line) return _.to_array(line.words:gmatch("%S+")) end)
+  :flatten()
+  :reduce({}, function(counts, word)
+    counts[word] = (counts[word] or 0) + 1
+    return counts
+  end):value()
+</code>
+</pre>  
+
+
+
+
+* map _.map(iter, func) Aliases: collect    
+<pre><code class="markdown">    
+_.map({1,2,3}, function(i) return i*2 end)
+=> { 2,4,6 }
+</code>
+</pre>  
+
+
+
+* each _.each(iter, func) Aliases: for_each   
+<pre><code class="markdown">    
+_.each({1,2,3}, print)
+=> {1,2,3} 
+</code>
+</pre>  
+
+
+
+* select _.select(iter, func) Aliases: filter   
+<pre><code class="markdown">    
+_.select({1,2,3}, function(i) return i%2 == 1 end)
+=> {1,3}
+</code>
+</pre>  
+
+
+
+* reject _.reject(iter, func)   
+<pre><code class="markdown">    
+_.reject({1,2,3}, function(i) return i%2 == 1 end)
+=> {2}
+</code>
+</pre>  
+
+
+
+* 快速使用指南   
+<pre><code class="markdown">    
+   _ = require 'luaer'    
+   _.each({1,2,3}, print)  
+</code>
+</pre>  
+
+
+
+* invoke _.invoke(foo, blah)   
+<pre><code class="markdown">    
+Person = {}
+Person.__index = Person 
+function Person:new(name) 
+  return setmetatable({ name=name }, self) 
+end 
+function Person:print() 
+  print(self.name) 
+end 
+_.invoke({ Person:new("Tom"), Person:new("Dick"), Person:new("Harry") }, "print") 
+=> Calls person:print() on each Person
+</code>
+</pre>  
+
+
+
+* pluck _.pluck(iter, property_name)    
+<pre><code class="markdown">    
+_.pluck({ {id=1}, {id=2}, {id=3} }, 'id') 
+=> { 1, 2, 3 } 
+</code>
+</pre>  
+
+
+
+* reduce _.reduce(iter, memo, func) Aliases: inject,foldl   
+<pre><code class="markdown">    
+_.reduce({1,2,3}, 0, function(memo, i) return memo+i end)
+=> 6 
+</code>
+</pre>  
+
+
+* max _.max(iter, [func])   
+<pre><code class="markdown">    
+_.max({1,2,3,4}) 
+=> 4
+_.max({ {age=15}, {age=12}, {age=19} }, function(p) return p.age end) 
+=> {age=19}
+</code>
+</pre>  
+
+
+
+* min _.min(iter, [func])   
+<pre><code class="markdown">    
+_.max({1,2,3,4}) 
+=> 1
+_.max({ {age=15}, {age=12}, {age=19} }, function(p) return p.age end) 
+=> {age=12}
+</code>
+</pre>  
+
+
+
+* include _.include(iter, value)   
+<pre><code class="markdown">    
+_.include({1,2,3,4}, function(i) return i%2 == 0 end)
+=> true
+_.include({1,3,5}, function(i) return i%2 == 0 end)
+=> false
+</code>
+</pre>  
+
+
+* detect _.detect(iter, func)   
+<pre><code class="markdown">    
+_.detect({1,2,3,4}, func(i) return i > 3 end)
+=> 4
+_.detect({1,2,3,4}, func(i) return i > 7 end)
+=> nil
+</code>
+</pre>    
+ 
+
+* all _.all(iter, [func]) Aliases: every   
+<pre><code class="markdown">    
+_.all({2,4,8}, function(i) return i%2 == 0 end)        
+=> true
+_.all({1,2,3,4}, function(i) return i%2 == 0 end)        
+=> false
+</code>
+</pre>    
+ 
+* any _.any(iter, [func]) Aliases: some   
+<pre><code class="markdown">    
+_.any({1,2,3,4}, function(i) return i%2 == 0 end)        
+=> true
+_.any({1,3,5}, function(i) return i%2 == 0 end)        
+=> false
+</code>
+</pre>    
+ 
+* to_array _.to_array(iter)   
+<pre><code class="markdown">    
+_.to_array(string.gmatch("dog cat goat", "%S+")) 
+=> { "dog", "cat", "goat" }  
+</code>
+</pre>    
+ 
+* sort _.sort(iter, [comparison_func])   
+<pre><code class="markdown">
+-- 默认比较是<     
+_.sort({ 3, 1, 2}) 
+=> { 1, 2, 3 }
+</code>
+</pre>    
+ 
+* reverse _.reverse(iter, [comparison_func])   
+<pre><code class="markdown">    
+_.reverse({ 1, 2, 3}) 
+=> { 3, 2, 1 }
+</code>
+</pre>    
+ 
+* flatten _.flatten(array)   
+<pre><code class="markdown">    
+_.flatten({1, {2}, {3, {{{4}}}}}) 
+=> { 1, 2, 3, 4 }
+</code>
+</pre>    
+ 
+* first _.first(array, [length]) Aliases: head   
+<pre><code class="markdown">    
+_.first({1,2,3}) 
+=> 1
+_.first({1,2,3}, 2) 
+=> {1,2,}
+</code>
+</pre>    
+ 
+* rest _.rest(array, [start_index]) Aliases: tail   
+<pre><code class="markdown">    
+_.rest({1,2,3}) 
+=> {2,3} 
+_.rest({1,2,3}, 2) 
+=> {3}
+</code>
+</pre>    
+ 
+* slice _.slice(array, start_index, length)   
+<pre><code class="markdown">    
+_.slice({ 1, 2, 3, 4, 5 }, 2, 3) 
+=> { 2, 3, 4 }
+</code>
+</pre>    
+ 
+* push _.push(array, item)   
+<pre><code class="markdown">    
+_.push({1,2,3}, 4)
+=> {1,2,3,4}
+</code>
+</pre>    
+ 
+* pop _.pop(array)   
+<pre><code class="markdown">    
+_.pop({1,2,3})
+=> 3
+</code>
+</pre>    
+ 
+* shift _.shift(array)   
+<pre><code class="markdown"> 
+-- 删除并且返回第一个元素   
+_.shift({1,2,3})
+=> 1
+</code>
+</pre>    
+ 
+* unshift _.unshift(array, item)   
+<pre><code class="markdown">   
+-- 在数组开头插入元素 
+_.push({1,2,3}, 4)
+=> {4,1,2,3}
+</code>
+</pre>    
+ 
+* join _.join(array)   
+<pre><code class="markdown">    
+_.join({'c','a','t'})
+=> "cat"
+_.join({'c','a','t'}, '/')
+=> "c/a/t"
+</code>
+</pre>    
+ 
+* extend _.extend(destination, source) 
+<pre><code class="markdown">    
+_.extend({ name = 'moe' }, { age = 50 }) 
+=> { name = 'moe', age = 50 }
+</code>
+</pre>    
+ 
+* keys _.keys(object)    
+<pre><code class="markdown">    
+_.keys { name = "John", age = 25 }
+=> { "name", "age" }
+</code>
+</pre>    
+ 
+* values _.values(object)   
+<pre><code class="markdown">    
+_.values { name = "John", age = 25 }
+=> { "John", 25 }
+</code>
+</pre>    
+ 
+* is_empty _.is_empty(object)   
+<pre><code class="markdown">    
+_.is_empty({}) 
+=> true 
+-.is_empty({ name = "moe" }) 
+=> false
+</code>
+</pre>    
+ 
+* curry _.curry(func, arg)   
+<pre><code class="markdown">  
+-- 创建curry函数
+function f(a,b,c,d) return a + b^2 + c^3 + d^4 end
+g = curry(f, 1)
+g = g(2,3,5)
+print(g) -- 657
+g = curry(f, 1)
+g = curry(g,2)
+g = curry(g,3)
+g = g(5)
+print(g) -- 657
+</code>
+</pre>    
+ 
+* wrap _.wrap(func, wrapper)   
+<pre><code class="markdown">    
+hello = function(name) 
+  return "hello: "..name 
+end 
+hello = _.wrap(hello, function(func, ...) 
+  return "before, "..func(...)..", after" 
+end) 
+hello('moe') 
+=> before, hello: moe, after
+</code>
+</pre>    
+ 
+* compose _.compose(func1, func2, [...])   
+<pre><code class="markdown">    
+greet = function(name) 
+  return "hi: "..name 
+end 
+exclaim = function(statement) 
+  return statement.."!" 
+end 
+welcome = _.compose(print, greet, exclaim) -- = p(g(e())).
+welcome('moe') 
+=> hi: moe!
+</code>
+</pre>    
+ 
+* functions _.functions()   
+返回此library的函数列表  
+ 
+* iter _.iter()
+<pre><code class="markdown">    
+for i in _.iter({1,2,3}) do
+  print(i)
+end
+</code>
+</pre>    
+ 
+* range _.range(start_or_length, [end], [step])   
+<pre><code class="markdown">    
+_.range(5,10):to_array()
+=> { 5,6,7,8,9,10 }
+_.range(10):to_array()
+=> { 1,2,3,4,5,6,7,8,9,10 }
+_.range(2,10,2):to_array()
+=> { 2,4,6,8,10 }
+_.range(10,2,-2):to_array()
+=> { 10,8,6,4,2 }
+</code>
+</pre>    
+ 
+* s_equal _.is_equal(o1,o2,[ignore_mt])   
+<pre><code class="markdown">    
+_.is_equal({1,2,3},{1,2,3})
+=> true
+_.is_equal({a=1,b=2},{a=1,b=2})
+=> true
+_.is_equal({a=1,b=2},{a=2,b=3})
+=> false
+</code>
+</pre>    
+ 
+* chain _.chain()   
+<pre><code class="markdown">    
+_.({1,2,3,4}):chain():map(function(i) return i+1 end):select(function(i) i%2 == 0 end):value()
+=> { 2,4 }
+</code>
+</pre>    
+ 
+* value _.value()   
+<pre><code class="markdown">    
+_.({1,2,3,4}):chain():map(function(i) return i+1 end):select(function(i) i%2 == 0 end):value()
+=> { 2,4 }
+</code>
+</pre>    
+
+
+
 
  
 
