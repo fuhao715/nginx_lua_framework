@@ -1265,22 +1265,23 @@ _.each({1,2,3}, print)
 </pre>  
 
 
-* Iterator Functions and Arrays   
-<pre><code class="markdown">    
+* Iterator Functions and Arrays     
+<pre><code class="markdown">     
 function sq(n)
   return coroutine.wrap(function() 
     for i=1,n do
       coroutine.yield(i*i)
     end
   end)
-end
+end   
 
-_.each(sq(5), print)
-=> 1
-=> 4
-=> 9
-=> 16
-=> 25
+_.each(sq(5), print)   
+=> 1   
+=> 4  
+=> 9  
+=> 16  
+=> 25    
+
 </code>
 </pre>  
 
@@ -1293,37 +1294,40 @@ _({1, 2, 3}):map(function(n) return n * 2 end)
 </pre>  
 >  使用面向对象的风格方法允许书写链式结构的调用。调用chain把对象包装成wrapped object传递给后续的所有的方法调用，并且返回wrapped objects。当你完成了计算,使用values来获取最终的价值。如下例子  
 <pre><code class="markdown">    
-local lyrics = {
-  { line = 1, words = "I'm a lumberjack and I'm okay" },
-  { line = 2, words = "I sleep all night and I work all day" },
-  { line = 3, words = "He's a lumberjack and he's okay" },
-  { line = 4, words = "He sleeps all night and he works all day" }
-}
+local lyrics = {   
+  { line = 1, words = "I'm a lumberjack and I'm okay" },   
+  { line = 2, words = "I sleep all night and I work all day" },   
+  { line = 3, words = "He's a lumberjack and he's okay" },   
+  { line = 4, words = "He sleeps all night and he works all day" }   
+}    
 
-_(lyrics):chain()
+_(lyrics):chain()  
   :map(function(line) 
-    local words = {}
-    for w in line.words:gmatch("%S+") do
-      words[#words+1] = w   
-    end
-    return words
-  end)
-  :flatten()
-  :reduce({}, function(counts, word)
-    counts[word] = (counts[word] or 0) + 1
-    return counts
-  end):value()
+    local words = {}    
+    for w in line.words:gmatch("%S+") do   
+      words[#words+1] = w      
+    end   
+    return words    
+  end)   
+  :flatten()   
+  :reduce({}, function(counts, word)   
+    counts[word] = (counts[word] or 0) + 1   
+    return counts   
+  end):value()    
+
 </code>
 </pre>  
+
 > 还可以写得更加简洁，更有luaer范   
 <pre><code class="markdown">    
-_(lyrics):chain()
-  :map(function(line) return _.to_array(line.words:gmatch("%S+")) end)
-  :flatten()
-  :reduce({}, function(counts, word)
-    counts[word] = (counts[word] or 0) + 1
-    return counts
-  end):value()
+_(lyrics):chain()    
+  :map(function(line) return _.to_array(line.words:gmatch("%S+")) end)    
+  :flatten()   
+  :reduce({}, function(counts, word)   
+    counts[word] = (counts[word] or 0) + 1   
+    return counts   
+  end):value()     
+
 </code>
 </pre>  
 
