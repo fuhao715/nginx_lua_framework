@@ -1704,3 +1704,4 @@ _.({1,2,3,4}):chain():map(function(i) return i+1 end):select(function(i) i%2 == 
 https://github.com/fuhao715
 email:fuhao715@126.com
 site:http://fuhao715.github.io
+微信公众号:golang-python
