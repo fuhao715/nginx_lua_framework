@@ -1702,4 +1702,5 @@ _.({1,2,3,4}):chain():map(function(i) return i+1 end):select(function(i) i%2 == 
 ## Any questions?
 ---
 https://github.com/fuhao715
-emai:fuhao715@126.com
+email:fuhao715@126.com
+site:http://fuhao715.github.io
