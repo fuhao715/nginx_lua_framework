@@ -35,7 +35,8 @@ function to_string(data)
     if "nil" == type(data) then
         return tostring(nil)
     elseif "table" == type(data) then
-        return table_print(data)
+        local utils_table = require('letv.utils_table')
+        return utils_table.table_print(data)
     elseif  "string" == type(data) then
         return data
     else
@@ -199,4 +200,18 @@ end
 function validate(str,rule)
 	-- TODO 
 	return false;
+end
+
+function isBlank(str)
+    if not str then
+        return true
+    end
+    if str=='' then
+        return true
+    end
+    str=string.gsub(str," ","")
+    if string.len(str)==0 then
+      return true
+    end
+    return false
 end

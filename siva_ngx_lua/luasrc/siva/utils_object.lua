@@ -81,3 +81,60 @@ function deepcopy(object)
 	end
 	return _copy(object)
 end
+
+function md5(source)
+    local resty_md5 = require "resty.md5"
+    local md5 = resty_md5:new()
+    if not md5 then
+        logger:e("failed to create md5 object")
+        return
+    end
+
+    ok = md5:update(source)
+    if not ok then
+        logger:e("failed to add data")
+        return
+    end
+
+    local digest = md5:final()
+
+    local str = require "resty.string"
+    logger:i("md5: "..str.to_hex(digest))
+    return str.to_hex(digest)
+    -- yield "md5: 5d41402abc4b2a76b9719d911017c592"
+end
+
+
+function computeMD5(source)
+    local resty_md5 = require "resty.md5"
+    local md5 = resty_md5:new()
+    if not md5 then
+        logger:e("failed to create md5 object")
+        return
+    end
+    md5:reset()
+    -- local sbyte = {string.byte(source,1,string.len(source))}
+    ok = md5:update(source)
+    if not ok then
+        logger:e("failed to add data")
+        return
+    end
+
+    local digest = md5:final()
+    local str = require "resty.string"
+    logger:i("md5: "..str.to_hex(digest))
+    return {string.byte(digest,1,string.len(digest))}
+end
+
+function hash(digest,nTime)
+    local bit = require "bit"
+    local band = bit.band -- 位与 &
+    local bor = bit.bor -- 位或  |
+    local lshift = bit.lshift -- 左移  <<
+    rv = bor(bor(bor(lshift(band(digest[4 + nTime * 4],0xFF),24),lshift(band(digest[3 + nTime * 4],0xFF),16)),lshift(band(digest[2 + nTime * 4],0xFF),8)),band(digest[1 + nTime * 4],0xFF))
+    return band(rv , 0xffffffff) -- Truncate to 32-bits 
+end
+
+function consistencyHash(str)
+    return hash(computeMD5(str),0);
+end
