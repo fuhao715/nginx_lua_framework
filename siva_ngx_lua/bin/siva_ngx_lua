@@ -48,7 +48,17 @@ function show_help_and_exit()
     os.exit()
 end
 
-function new_app(name,path)
+print(HELP_INFO)
+
+function new_app()
+    if #arg ~= 3 then
+        show_help_and_exit()
+    else
+       print('-new ----'..arg[2]..'---path---'..arg[3])
+       path = arg[3]..'/'..arg[2]
+       os.execute('mkdir -p  '..path)
+       os.execute('cp -r $SIVA_NGX_LUA_HOME/demos/default/*  '..path)
+    end
 end
 
-print(HELP_INFO)
+new_app()
