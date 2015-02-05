@@ -2,7 +2,7 @@
 
 
 ## 由 Lua 粘合的 Nginx 生态环境   
->  AJAX 化和 Service 化的趋势让所有东西开始讲 –RESTful
+>  AJAX 化和 Service 化的趋势让所有东西开始讲 –RESTful      
 >  天下武功，无坚不破，唯快不破！Nginx的看家本领就是速度，Lua的拿手好戏亦是速度，这两者的结合在速度上无疑有基因上的优势。
 
 ## 为什么选择Nginx?  
@@ -1065,7 +1065,7 @@ os.tmpname ()	临时文件名
     
 <pre><code class="markdown"> 
 cd  /path/to/siva_ngx_lua/bin
-./siva_ngx_lua  new <APP_NAME> <APP_PATH>
+./siva  new <APP_NAME> <APP_PATH>
  
 </code>
 </pre>
@@ -1241,7 +1241,7 @@ request:set_uri_args(args)                  -- http://wiki.nginx.org/HttpLuaModu
  
 
 
-### request对象的属性和方法
+### response对象的属性和方法
 
     
 <pre><code class="markdown"> 
@@ -1260,6 +1260,44 @@ response:is_finished()
 response:defer(func, ...)                   -- 在response返回后执行
 </code>
 </pre>
+
+
+## 打印调试日志    
+在 `application.lua` 里定义log文件的位置和Level
+
+    logger:i(format, ...)  -- INFO
+    logger:d(format, ...)  -- DEBUG
+    logger:w(format, ...)  -- WARN
+    logger:e(format, ...)  -- ERROR
+    logger:f(format, ...)  -- FATAL
+    -- format 和string.format(s, ...) 保持一致：http://www.lua.org/manual/5.1/manual.html#pdf-string.format
+
+## 查看调试日志    
+
+    tail -f siva_demo.log
+
+## 查看nginx错误日志   
+
+    tail -f nginx_runtime/logs/error.log  #查看 Nginx 错误日志和调试日志 的输出
+
+##  常见错误   
+1. siva URL Mapping Error
+1. Error while doing defers
+1. siva ERROR
+
+## Multi-App 与 Sub-App
+
+### multi-app
+    多个 siva-app 可以运行与同一nginx进程中，只要将本例子中nginx.conf内siva-app相关段配置多份即可。
+
+### sub-app
+    某siva-app可以作为另一app的sub-app运行，在主app的application.lua内配置：
+
+    subapps={
+        subapp1 = {path="/path/to/subapp1", config={}},
+        ...
+    }
+
 
 ### luaer的magic写法支持
 * 简介      
@@ -1698,7 +1736,11 @@ _.({1,2,3,4}):chain():map(function(i) return i+1 end):select(function(i) i%2 == 
 
 
 
-
+## 参考
+1. http://wiki.nginx.org/HttpLuaModule
+1. http://wiki.nginx.org/HttpCoreModule
+1. http://openresty.org
+1. https://github.com/fuhao715/nginx_lua_framework
  
 
 ## 思考
