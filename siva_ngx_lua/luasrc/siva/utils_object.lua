@@ -128,9 +128,9 @@ end
 
 function hash(digest,nTime)
     local bit = require "bit"
-    local band = bit.band -- 位与 &
-    local bor = bit.bor -- 位或  |
-    local lshift = bit.lshift -- 左移  <<
+    local band = bit.band -- 浣嶄笌 &
+    local bor = bit.bor -- 浣嶆垨  |
+    local lshift = bit.lshift -- 宸︾Щ  <<
     rv = bor(bor(bor(lshift(band(digest[4 + nTime * 4],0xFF),24),lshift(band(digest[3 + nTime * 4],0xFF),16)),lshift(band(digest[2 + nTime * 4],0xFF),8)),band(digest[1 + nTime * 4],0xFF))
     return band(rv , 0xffffffff) -- Truncate to 32-bits 
 end
