@@ -55,9 +55,22 @@ function new_app()
         show_help_and_exit()
     else
        print('-new ----'..arg[2]..'---path---'..arg[3])
-       path = arg[3]..'/'..arg[2]
-       os.execute('mkdir -p  '..path)
-       os.execute('cp -r $SIVA_NGX_LUA_HOME/demos/default/*  '..path)
+       local path = arg[3]
+       local app_path = arg[3]..'/'..arg[2]
+       os.execute('mkdir -p  '..app_path)
+       os.execute('cp  $LETV_NGX_LUA_HOME/demos/default/README.md  '..path)
+       os.execute('cp -r  $LETV_NGX_LUA_HOME/demos/default/bin  '..path)
+       os.execute("awk 'BEGIN { cmd=\"cp -ir $LETV_NGX_LUA_HOME/demos/default/conf " .. path .."  \"; print \"n\" |cmd; }'")
+       os.execute("awk 'BEGIN { cmd=\"cp -ir $LETV_NGX_LUA_HOME/demos/default/nginx_runtime " .. path .."  \"; print \"n\" |cmd; }'") 
+
+       os.execute('cp -r $LETV_NGX_LUA_HOME/demos/default/app  '..app_path)
+       os.execute('cp -r $LETV_NGX_LUA_HOME/demos/default/static  '..app_path)
+       os.execute('cp -r $LETV_NGX_LUA_HOME/demos/default/templates  '..app_path)
+       os.execute('cp -r $LETV_NGX_LUA_HOME/demos/default/application.lua  '..app_path)
+       os.execute('cp -r $LETV_NGX_LUA_HOME/demos/default/routing.lua  '..app_path)
+       print('\n')
+       print('-new ----'..arg[2]..'---path---'..arg[3]..'----ok-----')
+       -- os.execute('cp -r $SIVA_NGX_LUA_HOME/demos/default/*  '..path)
     end
 end
 

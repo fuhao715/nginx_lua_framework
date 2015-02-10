@@ -1074,11 +1074,17 @@ cd  /path/to/siva_ngx_lua/bin
  
 ### 程序目录结构  
 <pre><code class="markdown" > 
-siva-demo #程序根目录
-|-- routing.lua # URL Routing配置
-|-- application.lua # app 描述文件
-|-- app #应用目录
-|   `-- test.lua #请求处理函数
+siva-cluster #程序根目录
+|-- app1 #应用2目录
+|    |`-- app #应用主目录
+|         `-- test.lua #请求处理函数
+|   |-- routing.lua # URL Routing配置
+|   |-- application.lua # app 描述文件
+|-- app2 #应用2目录
+|   |`-- app #应用主目录
+|         `-- test.lua #请求处理函数
+|   |-- routing.lua # URL Routing配置
+|   |-- application.lua # app 描述文件
 |-- bin #脚本目录
 |   |-- debug.sh #关闭服务->清空error log->启动服务->查看error log
 |   |-- reload.sh #平滑重载配置
