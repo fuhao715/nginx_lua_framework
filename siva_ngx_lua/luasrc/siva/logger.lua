@@ -33,33 +33,37 @@ logging = require("logging")
 sivautil = require("siva.util")
 sivavars = require("siva.vars")
 
+
 function get_logger(appname)
     local logger = sivavars.get(appname, "__LOGGER")
     if logger then return logger end
+    local getLogConf= function()
+        local filename = "/dev/stderr"
+        local level = "DEBUG"
+        -- local log_config = sivautil.get_config(appname, "logger")
+        local log_config = sivautil.get_config("logger")
     
-    local filename = "/dev/stderr"
-    local level = "DEBUG"
-    -- local log_config = sivautil.get_config(appname, "logger")
-    local log_config = sivautil.get_config("logger")
-    
-    if log_config and type(log_config.file) == "string" then
-        filename = log_config.file
-    end
-    
-    if log_config and type(log_config.level) == "string" then
-        local tmp = string_upper(log_config.level)
-        if not logging.LEVELS[tmp] then
-            tmp = 'DEBUG'
+        if log_config and type(log_config.file) == "string" then
+            filename = log_config.file
         end
-        level = tmp
+    
+        if log_config and type(log_config.level) == "string" then
+            local tmp = string_upper(log_config.level)
+            if not logging.LEVELS[tmp] then
+                tmp = 'DEBUG'
+            end
+            level = tmp
+        end
+        return filename,level
     end
 
     local log_filename = function(date)
-      return filename .. '.' .. date
+      local fn,_ = getLogConf() 
+      return fn .. '.' .. date
     end
-
     local f_date = os_date("%Y-%m-%d", ngx_time())
-    local f = io_open(log_filename(f_date), "a")
+    local fname = log_filename(f_date)
+    local f = io_open(fname, "a")
     if not f then
         f = io_open("/dev/stderr", "a")
         ngx.log(ngx.ERR, string_format("LOGGER ERROR: file `%s' could not be opened for writing", filename))
@@ -76,7 +80,8 @@ function get_logger(appname)
                                 frame.currentline,
                                 message)
         local log_date = string_sub(date, 1, 10)
-        if log_date ~= f_date then
+        local nowFName = log_filename(f_date)
+        if fname ~= nowFName  then
           f_date = log_date
           f:close()
           f = io_open(log_filename(log_date), "a")
@@ -86,7 +91,8 @@ function get_logger(appname)
         return true
     end
     
-    logger = logging.new(log_appender)
+    local logger = logging.new(log_appender)
+    local _,level = getLogConf()
     logger:setLevel(level)
     sivavars.set(appname, "__LOGGER", logger)
     logger._log = logger.log
