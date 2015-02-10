@@ -193,3 +193,30 @@ function table_excepted(t1, t2)
 	end
 	return ret
 end
+
+
+function array_contact(t1,t2)
+   if not t1 then
+     if type(t2)~="table" then
+      error("params t2 not a table",2)
+     else
+      return t2
+     end
+   end
+
+   if not t2 then
+    if type(t1)~="table" then
+      error("params t1 not a table",2)
+    else
+      return t1
+    end
+   end
+   t={}
+   for k,v in pairs(t1) do
+    table.insert(t,v)
+   end
+   for k,v in pairs(t2) do
+    table.insert(t,v)
+   end
+   return t
+end

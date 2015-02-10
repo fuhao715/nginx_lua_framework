@@ -48,6 +48,7 @@ function Request:new()
         content_type    = ngx_var.content_type,
         content_length  = ngx_var.content_length,
         uri_args        = ngx_req.get_uri_args(),
+	body            = self:read_body(),
         post_args       = up_data,
         upload_data     = up_data,
         socket          = ngx_req.socket
@@ -130,10 +131,11 @@ function Request:get_arg(name, default)
 end
 
 function Request:read_body()
-    logger:i("read_body is call -----")
     local ngx_req = ngx.req
     ngx_req.read_body()
     self.post_args = ngx_req.get_post_args()
+    self.body      = ngx.var.request_body
+    return ngx.var.request_body 
 end
 
 function Request:get_cookie(key, decrypt)
