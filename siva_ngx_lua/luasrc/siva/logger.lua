@@ -80,9 +80,10 @@ function get_logger(appname)
                                 frame.currentline,
                                 message)
         local log_date = string_sub(date, 1, 10)
-        local nowFName = log_filename(f_date)
+        local nowFName = log_filename(log_date)
         if fname ~= nowFName  then
           f_date = log_date
+	  fname = nowFName
           f:close()
           f = io_open(log_filename(log_date), "a")
           f:setvbuf("line")
