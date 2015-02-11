@@ -133,8 +133,8 @@ end
 function Request:read_body()
     local ngx_req = ngx.req
     ngx_req.read_body()
-    self.post_args = ngx_req.get_post_args()
-    self.body      = ngx.var.request_body
+    -- self.post_args = ngx_req.get_post_args()
+    --  self.body      = ngx.var.request_body
     return ngx.var.request_body 
 end
 
