@@ -23,6 +23,17 @@
 * 事件驱动的机制  
 * I/O 多路复用     
 ![IO](/doc/image/anim.gif "io")     
+
+ 
+## Nginx进程模型      
+ 
+>  Nginx采用多进程模型，单Master—多Worker，    
+>  由Master处理外部信号、配置文件的读取及Worker的初始化，    
+>  Worker进程采用单线程、非阻塞的事件模型（Event Loop，事件循环）来实现端口的监听及客户端请求的处理和响应，   
+>  同时Worker还要处理来自Master的信号。由于Worker使用单线程处理各种事件，     
+>  所以一定要保证主循环是非阻塞的，否则会大大降低Worker的响应能力。
+
+![IO](/doc/image/nginx_model.gif "io")   
    
  
 ## 为什么选择Lua
@@ -57,6 +68,21 @@
   –所写即所得的语言。   
 
 
+
+## 协程（Coroutine）   
+
+协程类似一种多线程，与多线程的区别有：
+* 协程并非os线程，所以创建、切换开销比线程相对要小。    
+* 协程与线程一样有自己的栈、局部变量等，但是协程的栈是在用户进程空间模拟的，所以创建、切换开销很小。
+* 多线程程序是多个线程并发执行，也就是说在一瞬间有多个控制流在执行。而协程强调的是一种多个协程间协作的关系，
+   只有当一个协程主动放弃执行权，另一个协程才能获得执行权，所以在某一瞬间，多个协程间只有一个在运行。
+* 由于多个协程时只有一个在运行，所以对于临界区的访问不需要加锁，而多线程的情况则必须加锁。
+* 多线程程序由于有多个控制流，所以程序的行为不可控，而多个协程的执行是由开发者定义的所以是可控的。
+Nginx的每个Worker进程都是在epoll或kqueue这样的事件模型之上，封装成协程，每个请求都有一个协程进行处理。
+这正好与Lua内建协程的模型是一致的，所以即使ngx_lua需要执行Lua，相对C有一定的开销，但依然能保证高并发能力。
+
+
+
  
 ## ngx_lua 原理    
 
@@ -75,11 +101,31 @@
 
 * 业务更加稳定        
 – Nginx大连接数目支持非常好      
-– Nginx本身的内存占用很少，更丌会吃swap      
+– Nginx本身的内存占用很少，更不会吃swap      
 – 业务性能更高      
 * QPS比Apache要好     
 * 节省机器数目      
-* 基于Nginx的模块性能往往是乊前业务的数倍         
+* 基于Nginx的模块性能往往是之前业务的数倍     
+
+
+
+
+## OpenResty、PHP-fpm与NodeJs操作MySQL的性能对比
+
+> [春哥测试代码](https://github.com/agentzh/mysql-driver-benchmark)  
+
+![IO](/doc/image/cpu.jpg "io")     
+
+![IO](/doc/image/maxReqWB.jpg "io")     
+
+
+![IO](/doc/image/MaxReqWS.jpg "io")     
+ 
+
+![IO](/doc/image/ngx_srcache_ngx_memc.jpg "io")     
+
+
+![IO](/doc/image/ngx_srcache_ngx_memc1.jpg "io")  
  
  
 ## Lua基本语法指南
@@ -1026,7 +1072,29 @@ os.tmpname ()	临时文件名
 </pre>
 
 
+## 子请求（subrequest）
 
+> 在Nginx 世界里有两种类型的“请求”，一种叫做“主请求”（main request），而另一种则叫做“子请求”（subrequest）。   
+> “主请求”，就是由 HTTP 客户端从 Nginx 外部发起的请求。比如，从浏览器访问Nginx就是一个“主请求”。
+> “子请求”则是由 Nginx 正在处理的请求在 Nginx 内部发起的一种级联请求,
+> 外观上很像 HTTP 请求,但是,其实没有http的开销,因为,这是c 级别的内部调用!。
+> 目的是把“主请求”分解为多个较小粒度的“内部请求”，并发或串行地访问多个 location 接口，
+然后由这些 location 接口通力协作，共同完成整个“主请求”。当然，“子请求”的概念是相对的.    
+
+<pre><code class="markdown"> 
+location /main {   # curl location/main  
+    echo_location /foo;     # echo_location发送子请求到指定的location  
+    echo_location /bar;  
+}  
+location /foo {  
+    echo foo;  
+}  
+location /bar {  
+    echo bar;  
+}  
+ 
+</code>
+</pre>
 
  
 
