@@ -30,3 +30,8 @@ function timeformat()
 	local timestamp= os.date('%Y%m%d%H%M%S', os.time())
 	return timestamp
 end
+
+-- local time formate like 'yyyy-mm-dd'
+function today()
+   return ngx.today()
+end

@@ -9,9 +9,9 @@ local Redis = require("resty.redis")
 
 local redis_pool = {}
 
-function redis_pool:get_redis_conf()
+function redis_pool:get_redis_conf(redis_name)
     local sivautil = require("siva.util")
-    local redis_config = sivautil.get_config("redis")
+    local redis_config = sivautil.get_config(redis_name)
     local redis_host = "127.0.0.1"
     local redis_port = 6379
     local redis_timeout = 10000
@@ -35,12 +35,19 @@ function redis_pool:get_redis_conf()
     return redis_host,redis_port,redis_timeout,redis_poolsize
 end
 
-function redis_pool:get_redis_conn()
-    if ngx.ctx[redis_pool] then
-         return ngx.ctx[redis_pool]
+function redis_pool:get_redis_conn(red_name)
+    local app_name = ngx.ctx.SIVA_APP_NAME
+    local redis_name= red_name or 'redis'
+    local pool_name= app_name..redis_name
+    local red_pool = ngx.ctx[redis_pool]
+    if red_pool and red_pool[pool_name] then
+         return  red_pool[pool_name]
     end
+    if not red_pool then
+        red_pool = {}
+    end 
     local red = Redis:new()
-    local redis_host,redis_port,redis_timeout,redis_poolsize= redis_pool:get_redis_conf()
+    local redis_host,redis_port,redis_timeout,redis_poolsize= redis_pool:get_redis_conf(redis_name)
     local ok, err = red:connect(redis_host,redis_port)
     if not ok then
         logger:e({"failed to connect: ", err})
@@ -57,15 +64,22 @@ function redis_pool:get_redis_conn()
          return nil,err
     end
 --]]
-    ngx.ctx[redis_pool] = red 
-    return ngx.ctx[redis_pool]
+    red_pool[pool_name] = red
+    ngx.ctx[redis_pool] = red_pool 
+    return  red  -- ngx.ctx[redis_pool]
 end
 
-function redis_pool:close()
-     if ngx.ctx[redis_pool] then
-         local redis_host,redis_port,redis_timeout,redis_poolsize= redis_pool:get_redis_conf()
-         ngx.ctx[redis_pool]:set_keepalive(redis_timeout, redis_poolsize)
-         ngx.ctx[redis_pool] = nil
+function redis_pool:close(red_name)
+    local app_name = ngx.ctx.SIVA_APP_NAME
+    local redis_name= red_name or 'redis'
+    local pool_name= app_name..redis_name
+    local red_pool = ngx.ctx[redis_pool]
+    if red_pool and red_pool[pool_name] then
+         local redis_host,redis_port,redis_timeout,redis_poolsize= redis_pool:get_redis_conf(redis_name)
+	 local red = red_pool[pool_name] 
+         red:set_keepalive(redis_timeout, redis_poolsize)
+         -- ngx.ctx[redis_pool] = nil
+         red_pool[pool_name] = nil
      end
  end
 

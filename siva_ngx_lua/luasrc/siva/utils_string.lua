@@ -215,3 +215,29 @@ function isBlank(str)
     end
     return false
 end
+
+-- 对特殊字符进行编码，NULL (ASCII 0), \n, \r, \, ', ", 和 Control-Z
+function escape(str)
+   -- TODO
+end
+
+-- 对字符串进行 URL 编码
+function escape_uri(str)
+   return ngx.escape_uri(str)
+end
+
+-- 对字符串进行反 URL 编码
+function unescape_uri(str)
+   return ngx.unescape_uri(str)
+end
+
+-- encode base64  
+function encode_base64(str)
+   return ngx.encode_base64 (str)
+end
+
+
+-- decode base64  
+function decode_base64(str)
+   return ngx.decode_base64(str)
+end

@@ -51,3 +51,33 @@ function load_lines(source, firstline, lastline)
     return table.concat(lines,'\n')
 end
 
+function is_dir(dir)
+   if type(dir) ~= 'string' then return false end
+   -- TODO 
+end
+
+
+-- 只能判定文件是否能打开被取钱，并不能判定文件是否存在
+-- TODO  判定文件是否存在，得需要用c写
+function is_file(name)
+   if type(name) ~= 'string' then return false end
+   local f = io.open(name,'r')
+   if f~=nil then io.close(f) return true else return false end
+end
+
+
+-- 创建目录，返回 true 表示创建成功，或 nil
+function mkdir(dir)
+end
+
+
+-- 删除目录，返回 true 表示删除成功，或 nil
+function rmdir(dir)
+end
+
+-- 读取目录下的文件列表，以 table 类型返回 
+function readdir(dir)
+end
+
+
+
