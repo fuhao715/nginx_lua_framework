@@ -1800,14 +1800,14 @@ _.is_equal({a=1,b=2},{a=2,b=3})
  
 * chain _.chain()   
 <pre><code class="markdown">    
-_({1,2,3,4}):chain():map(function(i) return i+1 end):select(function(i) i%2 == 0 end):value()
+_({1,2,3,4}):chain():map(function(i) return i+1 end):select(function(i) return i%2 == 0 end):value()
 => { 2,4 }
 </code>
 </pre>    
  
 * value _.value()   
 <pre><code class="markdown">    
-_({1,2,3,4}):chain():map(function(i) return i+1 end):select(function(i) i%2 == 0 end):value()
+_({1,2,3,4}):chain():map(function(i) return i+1 end):select(function(i) return i%2 == 0 end):value()
 => { 2,4 }
 </code>
 </pre>    
