@@ -1558,6 +1558,10 @@ _.max({ {age=15}, {age=12}, {age=19} }, function(p) return p.age end)
 
 * include _.include(iter, value)   
 <pre><code class="markdown">    
+_.include({1,2,3,4}, 2)
+=> true
+_.include({1,3,5}, 2)
+=> false
 _.include({1,2,3,4}, function(i) return i%2 == 0 end)
 => true
 _.include({1,3,5}, function(i) return i%2 == 0 end)
@@ -1796,14 +1800,14 @@ _.is_equal({a=1,b=2},{a=2,b=3})
  
 * chain _.chain()   
 <pre><code class="markdown">    
-_.({1,2,3,4}):chain():map(function(i) return i+1 end):select(function(i) i%2 == 0 end):value()
+_({1,2,3,4}):chain():map(function(i) return i+1 end):select(function(i) i%2 == 0 end):value()
 => { 2,4 }
 </code>
 </pre>    
  
 * value _.value()   
 <pre><code class="markdown">    
-_.({1,2,3,4}):chain():map(function(i) return i+1 end):select(function(i) i%2 == 0 end):value()
+_({1,2,3,4}):chain():map(function(i) return i+1 end):select(function(i) i%2 == 0 end):value()
 => { 2,4 }
 </code>
 </pre>    

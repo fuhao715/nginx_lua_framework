@@ -127,8 +127,19 @@ function Luaer.funcs.any(list, func)
 end
 
 function Luaer.funcs.include(list, value)
-	for i in Luaer.iter(list) do
-		if i == value then return true end
+        local deal_func = function(v) return v==value end
+	if type(value) =='function' then 
+	    deal_func = value
+	end
+	for i in Underscore.iter(list) do
+		if deal_func(i) then return true end
+	end	
+	return false
+end
+
+function Luaer.funcs.include_func(list, func)
+	for i in Underscore.iter(list) do
+		if func(i) then return true end
 	end	
 	return false
 end
