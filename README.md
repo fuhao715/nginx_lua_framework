@@ -1540,6 +1540,8 @@ _.combine( { {1,2,3}, {3,2,1}, {1,1,1} }, function(a,b,c) return a+b+c end)
 => {5,5,5}
 _.combine( { {1,2,3}, {1,2,3}, {1,2,3} }, function(a,b,c) return a+b+c end) 
 => {3,6,9}
+_.combine({ {3,2,1}, {1,1,1,1,1} }, function(a,b) return a+b end)
+=> {4,3,2}
 </code>
 </pre>  
 
