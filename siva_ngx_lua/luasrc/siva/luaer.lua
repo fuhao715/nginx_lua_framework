@@ -76,6 +76,18 @@ function Luaer.funcs.map(list, func)
 	return mapped
 end
 
+function Luaer.funcs.combine(list, func)
+	local mapped = {}
+	local remaining_lists = Luaer.map(Luaer.rest(list), Luaer.iter)
+	for v1 in Luaer.iter(list[1]) do
+		local remaining_vals = Luaer.map(remaining_lists, function (x)
+			return x()
+		end)
+		mapped[#mapped+1] = func(v1, unpack(remaining_vals))
+	end
+	return mapped
+end
+
 function Luaer.funcs.reduce(list, memo, func)	
 	for i in Luaer.iter(list) do
 		memo = func(memo, i)
@@ -131,15 +143,8 @@ function Luaer.funcs.include(list, value)
 	if type(value) =='function' then 
 	    deal_func = value
 	end
-	for i in Underscore.iter(list) do
+	for i in Luaer.iter(list) do
 		if deal_func(i) then return true end
-	end	
-	return false
-end
-
-function Luaer.funcs.include_func(list, func)
-	for i in Underscore.iter(list) do
-		if func(i) then return true end
 	end	
 	return false
 end
@@ -346,7 +351,7 @@ end
 function Luaer.funcs.compose(...)
 	local function call_funcs(funcs, ...)
 		if #funcs > 1 then
-			return funcs[1](call_funcs(_.rest(funcs), ...))
+			return funcs[1](call_funcs(Luaer.rest(funcs), ...))
 		else
 			return funcs[1](...)
 		end

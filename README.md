@@ -1534,6 +1534,16 @@ _.reduce({1,2,3}, 0, function(memo, i) return memo+i end)
 </pre>  
 
 
+* combine _.combine(iters, func)  
+<pre><code class="markdown">    
+_.combine( { {1,2,3}, {3,2,1}, {1,1,1} }, function(a,b,c) return a+b+c end) 
+=> {5,5,5}
+_.combine( { {1,2,3}, {1,2,3}, {1,2,3} }, function(a,b,c) return a+b+c end) 
+=> {3,6,9}
+</code>
+</pre>  
+
+
 * max _.max(iter, [func])   
 <pre><code class="markdown">    
 _.max({1,2,3,4}) 
