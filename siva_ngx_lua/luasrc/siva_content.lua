@@ -94,7 +94,7 @@ function setup_app()
     if not config then config={} end
     siva_vars.set(app_name,"APP_CONFIG",config)
     
-    is_inited(app_name, true)
+    -- is_inited(app_name, true)
     
     if type(config.subapps) == "table" then
         for k, t in pairs(config.subapps) do
@@ -122,6 +122,7 @@ function setup_app()
     if config.debug and config.debug.on and siva_debug then
         debug.sethook(siva_debug.debug_hook, "cr")
     end
+    is_inited(app_name, true)
 
 end
 
