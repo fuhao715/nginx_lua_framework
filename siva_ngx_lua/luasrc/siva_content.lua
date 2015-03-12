@@ -36,9 +36,9 @@ function is_inited(app_name, init)
     end
     if init == nil then
         return r_G['siva_ngx_lua_inited'][app_name]
-    else
-        r_G['siva_ngx_lua_inited'][app_name] = init
-        if init then
+    else if init=='init' then
+        -- r_G['siva_ngx_lua_inited'][app_name] = init
+        -- if init then
             -- put logger into _G
             local logger = require("siva.logger")
             r_G["logger"] = logger.logger()
@@ -69,6 +69,8 @@ function is_inited(app_name, init)
                r_G["mysql_conn"] = mysql_conn.get_mysql_conn 
                r_G["mysql_close"] = mysql_conn.close 
             end
+	esle 
+	    r_G['luastar_inited'][app_name] = init
 
         end
     end
@@ -94,7 +96,7 @@ function setup_app()
     if not config then config={} end
     siva_vars.set(app_name,"APP_CONFIG",config)
     
-    -- is_inited(app_name, true)
+    is_inited(app_name, 'init')
     
     if type(config.subapps) == "table" then
         for k, t in pairs(config.subapps) do
