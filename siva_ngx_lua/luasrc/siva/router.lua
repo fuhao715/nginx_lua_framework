@@ -21,9 +21,9 @@
 
 module('siva.router',package.seeall)
 
-require 'siva.functional'
-require 'siva.vars'
-require 'siva.util'
+local functional = require 'siva.functional'
+local vars = require 'siva.vars'
+local util = require 'siva.util'
 
 local string_match = string.match
 local table_insert = table.insert
@@ -67,38 +67,38 @@ function setup()
     if app_name ~= main_app then
         app_name = main_app .. ">" .. app_name
     end
-    if not siva.vars.get(app_name,"ROUTE_INFO") then
-        siva.vars.set(app_name,"ROUTE_INFO",{})
+    if not vars.get(app_name,"ROUTE_INFO") then
+        vars.set(app_name,"ROUTE_INFO",{})
     end
-    if not siva.vars.get(app_name,"ROUTE_INFO")['ROUTE_MAP'] then
-        siva.vars.get(app_name,"ROUTE_INFO")['ROUTE_MAP'] = {}
-        siva.vars.get(app_name,"ROUTE_INFO")['ROUTE_ORDER'] = {}
+    if not vars.get(app_name,"ROUTE_INFO")['ROUTE_MAP'] then
+        vars.get(app_name,"ROUTE_INFO")['ROUTE_MAP'] = {}
+        vars.get(app_name,"ROUTE_INFO")['ROUTE_ORDER'] = {}
     end
-    siva.vars.get(app_name, "ROUTE_INFO").logger = getfenv(2).__LOGGER
-    siva.vars.get(app_name, "ROUTE_INFO")['map'] = siva.functional.curry(
+    vars.get(app_name, "ROUTE_INFO").logger = getfenv(2).__LOGGER
+    vars.get(app_name, "ROUTE_INFO")['map'] = functional.curry(
         map,
-        siva.vars.get(app_name,"ROUTE_INFO")['ROUTE_MAP'],
-        siva.vars.get(app_name,"ROUTE_INFO")['ROUTE_ORDER']
+        vars.get(app_name,"ROUTE_INFO")['ROUTE_MAP'],
+        vars.get(app_name,"ROUTE_INFO")['ROUTE_ORDER']
     )
         
-    -- siva.vars.get(app_name,"ROUTE_INFO")['get_config'] = siva.functional.curry(
+    -- siva.vars.get(app_name,"ROUTE_INFO")['get_config'] = functional.curry(
     --    siva.util.get_config,
     --    getfenv(2).__CURRENT_APP_NAME__
     -- )
 
-    siva.vars.get(app_name,"ROUTE_INFO")['get_config'] = siva.util.get_config
+    vars.get(app_name,"ROUTE_INFO")['get_config'] = util.get_config
         
-    setfenv(2, siva.vars.get(app_name, "ROUTE_INFO"))
+    setfenv(2, vars.get(app_name, "ROUTE_INFO"))
 end
 
 function merge_routings(main_app, subapps)
-    local main_routings=siva.vars.get(main_app,"ROUTE_INFO")['ROUTE_MAP']
-    local main_routings_order=siva.vars.get(main_app,"ROUTE_INFO")['ROUTE_ORDER']
+    local main_routings=vars.get(main_app,"ROUTE_INFO")['ROUTE_MAP']
+    local main_routings_order=vars.get(main_app,"ROUTE_INFO")['ROUTE_ORDER']
     for k,_ in pairs(subapps) do
         local expanded_key = main_app .. ">" .. k
-        local sub_routings=siva.vars.get(expanded_key,"ROUTE_INFO")['ROUTE_MAP']
+        local sub_routings=vars.get(expanded_key,"ROUTE_INFO")['ROUTE_MAP']
         for sk,sv in pairs(sub_routings) do main_routings[sk]=sv end
-        local sub_routings_order=siva.vars.get(expanded_key,"ROUTE_INFO")['ROUTE_ORDER']
+        local sub_routings_order=vars.get(expanded_key,"ROUTE_INFO")['ROUTE_ORDER']
         for _,sv in ipairs(sub_routings_order) do table_insert(main_routings_order,sv) end
     end
     table_sort(main_routings_order, route_sorter)
