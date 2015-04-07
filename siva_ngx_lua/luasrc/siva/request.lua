@@ -41,7 +41,7 @@ function Request:new()
         query_string    = ngx_var.query_string,
         headers         = ngx_req.get_headers(),
         user_agent      = ngx_var.http_user_agent,
-        remote_addr     = ngx_var.remote_addr,
+        remote_addr     = self:get_remote_addr(), -- ngx_var.remote_addr,
         remote_port     = ngx_var.remote_port,
         remote_user     = ngx_var.remote_user,
         remote_passwd   = ngx_var.remote_passwd,
@@ -59,6 +59,27 @@ function Request:new()
     return ret
 end
 
+function Request:get_remote_addr()
+    local remoteAddr = ngx.var.remote_addr
+    local js = require("cjson") --- delete this line
+    if '127.0.0.1' == remoteAddr then
+        local headers = ngx.req.get_headers()
+        if headers then
+           local remoteAddress = headers["x-forwarded-for"] or headers["x-real-ip"]
+	   if remoteAddress then 
+	       local split = function(str, sep)
+                   local fields = {}
+                   str:gsub("[^"..sep.."]+", function(c) fields[#fields+1] = c end)
+                   return fields
+               end
+	       local remoteAddressAry = split(remoteAddress,',')
+	       remoteAddr = remoteAddressAry[1]
+	   end
+	end 
+    end
+    logger:i(' remoteAddr is '..js.encode(remoteAddr))
+    return remoteAddr
+end
 
 function Request:get_post_param()
     local js = require("cjson") --- delete this line
